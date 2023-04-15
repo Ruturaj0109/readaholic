@@ -1,0 +1,12 @@
+body{
+    margin: 0px;
+}
+
+.wrapper{
+    min-height: calc(100vh - 24px);
+}
+
+.main-footer{
+    background-color: #212529;
+    color: white;
+}
