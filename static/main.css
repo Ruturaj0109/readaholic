@@ -3,10 +3,19 @@ body{
 }
 
 .wrapper{
-    min-height: calc(100vh - 24px);
+    /* min-height: calc(100vh - 24px); */
+    min-height: calc(100vh - 72px);
+
 }
 
 .main-footer{
     background-color: #212529;
     color: white;
+    padding: 24px 0;
 }
+
+.form-content-section{
+    max-width: 500px;
+    margin: 0 auto;
+}
+
