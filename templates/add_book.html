@@ -1,0 +1,45 @@
+{% extends "layout.html" %} {% block content %}
+<div class="form-content">
+    <legend class="border-bottom mb-4">Add Book</legend>
+ <form class="row g-3" method="POST" action="">
+  {{ form.hidden_tag() }}
+    <div class="col-md-6">
+      {{ form.title.label(class="form-label") }}{{
+        form.title(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+      {{ form.author.label(class="form-label") }}{{
+        form.author(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+      {{ form.isbn.label(class="form-label") }}{{
+        form.isbn(class="form-control") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.genre.label(class="form-label") }}{{
+          form.genre(class="form-control") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.shoplink.label(class="form-label") }}{{
+          form.shoplink(class="form-control") }}
+      </div>
+      <div class="col-md-6">
+        {{ form.rating.label(class="form-label") }}{{
+          form.rating(class="form-control") }}
+      </div>
+      <div class="col-12">
+        {{ form.coverimage.label(class="form-label") }}{{
+          form.coverimage(class="form-control") }}
+      </div>
+      <div class="mb-3">
+        {{ form.summary.label(class="form-label") }}{{
+          form.summary(class="form-control") }}
+      </div>   
+    <div class="col-12">
+      {{ form.save(class="btn btn-outline-info") }}
+    </div>
+  </form>
+</div>
+{% endblock%}
+
+
