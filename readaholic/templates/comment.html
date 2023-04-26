@@ -1,0 +1,26 @@
+{% extends "layout.html" %} {% block content %}
+<div class="form-content">
+    <legend class="border-bottom mb-4">Add a comment</legend>
+ <form class="row g-3" method="POST" action="">
+  {{ form.hidden_tag() }}
+    <div class="col-md-6">
+      {{ form.name.label(class="form-label") }}{{
+        form.name(class="form-control") }}
+    </div>
+    <div class="col-md-6">
+      {{ form.email.label(class="form-label") }}{{
+        form.email(class="form-control") }}
+    </div>
+      <div class="mb-3">
+        {{ form.summary.label(class="form-label") }}{{
+          form.summary(class="form-control form-control-lg") }}
+      </div>   
+    <div class="col-12">
+      {{ form.comment(class="btn btn-outline-info") }}
+    </div>
+  </form>
+</div>
+{% endblock%}
+
+
+

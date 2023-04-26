@@ -24,3 +24,10 @@ class AddBookForm(FlaskForm):
     coverimage = FileField("Upload Cover Image", validators=[DataRequired()])
     summary = TextAreaField("Tiny Summary",render_kw={"placeholder":"few words ..."}, validators=[DataRequired()])
     save =SubmitField("Save")
+
+class AddComment(FlaskForm):
+    name= StringField("Name", validators=[DataRequired()], render_kw={"placeholder":"Anonymous"})
+    email = StringField("Email", validators=[DataRequired(), Email()])
+    summary = TextAreaField("Comment", validators=[DataRequired()])
+    comment =SubmitField("Comment")
+
