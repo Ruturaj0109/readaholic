@@ -1,12 +1,16 @@
 from flask import render_template, flash, redirect, url_for
+from flask_login import login_user, logout_user, current_user, login_required
 from readaholic.forms import AdminRegisterationForms, AdminLoginForm, AddBookForm, AddComment
 from readaholic import app, db, bcrypt
-from readaholic.models import User, Comment
+from readaholic.models import User, Comment, Book
 
 @app.route("/")
+@login_required
 def home():
+    # book_data=Book.query.all()
     # return render_template("home.html", website_name=website_name)
     return render_template("home.html")
+    # return render_template("home.html", data=book_data)
 
 
 @app.route("/about")
@@ -34,6 +38,10 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        flash("You are already logged in!", "info")
+        return redirect(url_for('home'))
+
     form= AdminLoginForm()
     if form.validate_on_submit():
         _email = form.data['email']
@@ -44,6 +52,7 @@ def login():
             return redirect(url_for("register"))
         else:
             if bcrypt.check_password_hash(user.password, _password):
+                login_user(user)
                 flash("Successfully logged in!", "success")
                 return redirect(url_for("home"))
             else:
@@ -52,10 +61,26 @@ def login():
     return render_template("login.html", form =form)
 
 @app.route("/add_books", methods=["GET", "POST"])
+@login_required
 def add_book():
     form= AddBookForm()
     if form.validate_on_submit():
         print(form.data)
+        _title = form.data['title']
+        _author = form.data['author']
+        _isbn = form.data['isbn']
+        _genre = form.data['genre']
+        _shoplink = form.data['shoplink']
+        _rating = form.data['rating']
+        _cover_image = form.data['cover_image']
+        _summary = form.data['summary']
+        book = Book(title = _title, author = _author, isbn = _isbn, genre=_genre, shoplink=_shoplink, rating=_rating, cover_image=_cover_image ,summary=_summary)
+        try:
+            db.session.add(book)
+            db.session.commit()
+            flash("Book added successfully!", "success")
+        except:
+            flash("Something went wrong", "warning")
 
     return render_template("add_book.html", form=form)
 
@@ -72,3 +97,10 @@ def comment():
         # print("Comment added")
         
     return render_template("comment.html", form=form)
+
+@app.route("/logout", methods=["GET"])
+@login_required
+def logout():
+    logout_user()
+    flash("You've successfully logged out", "success")
+    return redirect(url_for("login"))
