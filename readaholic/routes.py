@@ -1,15 +1,19 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, send_from_directory
 from flask_login import login_user, logout_user, current_user, login_required
 from readaholic.forms import AdminRegisterationForms, AdminLoginForm, AddBookForm, AddComment
 from readaholic import app, db, bcrypt
 from readaholic.models import User, Comment, Book
+import os
+from uuid import uuid4
 
 @app.route("/")
 @login_required
 def home():
-    # book_data=Book.query.all()
+    book_data=Book.query.all()
+    for b in book_data:
+        print(b.cover_image)
     # return render_template("home.html", website_name=website_name)
-    return render_template("home.html")
+    return render_template("home.html", data=book_data)
     # return render_template("home.html", data=book_data)
 
 
@@ -60,21 +64,28 @@ def login():
 
     return render_template("login.html", form =form)
 
+def save_cover_image(cover_image):
+    f = cover_image.data
+    filename = f"picture-{str(uuid4())}.{f.filename.split('.')[1].lower()}"
+    f.save(os.path.join(app.instance_path, "uploads", filename))
+    return filename
+
+
 @app.route("/add_books", methods=["GET", "POST"])
 @login_required
 def add_book():
     form= AddBookForm()
     if form.validate_on_submit():
-        print(form.data)
         _title = form.data['title']
         _author = form.data['author']
         _isbn = form.data['isbn']
         _genre = form.data['genre']
         _shoplink = form.data['shoplink']
         _rating = form.data['rating']
-        _cover_image = form.data['cover_image']
+        _cover_image = save_cover_image(form.cover_image)
         _summary = form.data['summary']
-        book = Book(title = _title, author = _author, isbn = _isbn, genre=_genre, shoplink=_shoplink, rating=_rating, cover_image=_cover_image ,summary=_summary)
+        book = Book(
+            title = _title, author = _author, isbn = _isbn, genre=_genre, shoplink=_shoplink, rating=_rating, cover_image=_cover_image ,summary=_summary)
         try:
             db.session.add(book)
             db.session.commit()
@@ -104,3 +115,7 @@ def logout():
     logout_user()
     flash("You've successfully logged out", "success")
     return redirect(url_for("login"))
+
+@app.route("/uploads/<filename>", methods=["GET"])
+def send_image_file(filename):
+    return send_from_directory(os.path.join(app.instance_path, "uploads"), filename)

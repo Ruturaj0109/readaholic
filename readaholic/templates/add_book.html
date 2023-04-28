@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <div class="form-content">
     <legend class="border-bottom mb-4">Add Book</legend>
- <form class="row g-3" method="POST" action="">
+ <form class="row g-3" method="POST" action="" enctype="multipart/form-data">
   {{ form.hidden_tag() }}
     <div class="col-md-6">
       {{ form.title.label(class="form-label") }}{{

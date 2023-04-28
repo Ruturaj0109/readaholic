@@ -1,8 +1,36 @@
 
 {% extends "layout.html" %}
-
 {% block content %}
-{% for book in data %}
-
-{% endfor %}
-{% endblock%}
+<div class="book-deck">
+    <div class="row">
+        {% for book in data %}
+        <div class="col-sm-4 col-md-3 col-6 mb-4">
+            <div class="card shadow" style="width: 18rem;">
+                <a href="#" class="cover-image-container">
+                    <div class="book-img-container d-flex justify-content-center p-2 bg-secondary">
+                        <img src="{{ url_for('send_image_file', filename=book.cover_image) }}" style="max-width:150px;" class="card-img-top" alt="...">
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="book-card-title card-title"><b>{{ book.title }}</b></h5>
+                    <small class="book-genre-tag bg-info">{{ book.genre }}</small>
+                    <div class="rating-stars">
+                    {% for n in range(5) %}
+                        {% if n < book.rating//1 %}
+                        <span class="fa fa-star rating-star"></span>
+                        {% elif (book.rating - n) == 0.5 %}
+                        <i class="fas fa-star-half-alt rating-star"></i>
+                        {% else %}
+                        <span class="far fa-star rating-star"></span>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                    <p class="card-text">{{ book.summary }}</p>
+                    <a href="#" class="btn btn-sm btn-outline-info">Read Review</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
